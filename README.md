@@ -1,7 +1,6 @@
 # Fitness Assistant
 
-Note: I submitted this project too to see how many points it'd get
-
+## Project overview
 <p align="center">
   <img src="images/banner.jpg">
 </p>
@@ -13,27 +12,6 @@ trainers aren't always available.
 The Fitness Assistant provides a conversational AI that helps
 users choose exercises and find alternatives, making fitness more
 manageable.
-
-This project was implemented for 
-[LLM Zoomcamp](https://github.com/DataTalksClub/llm-zoomcamp) -
-a free course about LLMs and RAG.
-
-<p align="center">
-  <img src="images/image.png">
-</p>
-
-To see a demo of the project and instructions on how to run it
-on github codespaces, check this video:
-
-
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=RiQcSHzR8_E">
-    <img src="https://markdown-videos-api.jorgenkh.no/youtube/RiQcSHzR8_E">
-  </a>
-</p>
-
-
-## Project overview
 
 The Fitness Assistant is a RAG application designed to assist
 users with their fitness routines.
