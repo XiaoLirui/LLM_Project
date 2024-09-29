@@ -1,7 +1,7 @@
 import os
 from pymongo import MongoClient
 from datetime import datetime
-# from zoneinfo import ZoneInfo
+from dotenv import load_dotenv
 import pytz
 
 
@@ -75,7 +75,6 @@ def check_timezone():
     py_time = datetime.now(tz)
     print(f"Python current time: {py_time}")
 
-    # 测试插入和选择
     test_data = {
         "id": "test",
         "question": "test question",
@@ -103,3 +102,11 @@ def check_timezone():
 
 if RUN_TIMEZONE_CHECK:
     check_timezone()
+
+
+
+if __name__ == "__main__":
+    os.environ['RUN_TIMEZONE_CHECK'] = '0'
+    load_dotenv()
+    print("Initializing database...")
+    init_db()
