@@ -1,4 +1,4 @@
-# Fitness Assistant
+# Finance QA Helper
 
 ## Project overview
 
