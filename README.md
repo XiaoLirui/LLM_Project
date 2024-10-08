@@ -1,46 +1,23 @@
 # Fitness Assistant
 
 ## Project overview
-<p align="center">
-  <img src="images/banner.jpg">
-</p>
 
-Staying consistent with fitness routines is challenging,
-especially for beginners. Gyms can be intimidating, and personal
-trainers aren't always available.
+In finance, addressing a wide range of questions can be challenging, especially for beginners. The complexities of financial markets can feel overwhelming, and professional advisors are not always available.
 
-The Fitness Assistant provides a conversational AI that helps
-users choose exercises and find alternatives, making fitness more
-manageable.
+The Financial Q&A RAG application provides a conversational AI that helps users find answers to various financial inquiries, making financial literacy more accessible.
 
-The Fitness Assistant is a RAG application designed to assist
-users with their fitness routines.
+The Financial Q&A RAG is designed to assist users in navigating diverse financial topics and making informed decisions.
 
-The main use cases include:
-
-1. Exercise Selection: Recommending exercises based on the type
-of activity, targeted muscle groups, or available equipment.
-2. Exercise Replacement: Replacing an exercise with suitable
-alternatives.
-3. Exercise Instructions: Providing guidance on how to perform a
-specific exercise.
-4. Conversational Interaction: Making it easy to get information
-without sifting through manuals or websites.
 
 ## Dataset
 
-The dataset used in this project contains information about
-various exercises, including:
+The dataset used in this project contains information about various questions, including:
 
 - **Exercise Name:** The name of the exercise (e.g., Push-Ups, Squats).
 - **Type of Activity:** The general category of the exercise (e.g., Strength, Mobility, Cardio).
 - **Type of Equipment:** The equipment needed for the exercise (e.g., Bodyweight, Dumbbells, Kettlebell).
 - **Body Part:** The part of the body primarily targeted by the exercise (e.g., Upper Body, Core, Lower Body).
-- **Type:** The movement type (e.g., Push, Pull, Hold, Stretch).
-- **Muscle Groups Activated:** The specific muscles engaged during
-the exercise (e.g., Pectorals, Triceps, Quadriceps).
-- **Instructions:** Step-by-step guidance on how to perform the
-exercise correctly.
+
 
 The dataset was generated using ChatGPT and contains 207 records. It serves as the foundation for the Fitness Assistant's exercise recommendations and instructional support.
 
@@ -48,22 +25,16 @@ You can find the data in [`data/data.csv`](data/data.csv).
 
 ## Technologies
 
-- Python 3.12
+- Python 3.8
 - Docker and Docker Compose for containerization
-- [Minsearch](https://github.com/alexeygrigorev/minsearch) for full-text search
-- Flask as the API interface (see [Background](#background) for more information on Flask)
-- Grafana for monitoring and PostgreSQL as the backend for it
-- OpenAI as an LLM
+- Minsearch for full-text search
+- Flask as the API interface
+- Grafana for monitoring and MongoDB as the backend for it
+- OpenAI and Huggingface models as an LLM 
 
 ## Preparation
 
-Since we use OpenAI, you need to provide the API key:
-
-1. Install `direnv`. If you use Ubuntu, run `sudo apt install direnv` and then `direnv hook bash >> ~/.bashrc`.
-2. Copy `.envrc_template` into `.envrc` and insert your key there.
-3. For OpenAI, it's recommended to create a new project and use a separate key.
-4. Run `direnv allow` to load the key into your environment.
-
+Since we use OpenAI, you need to provide the API key in the rag.py;
 For dependency management, we use pipenv, so you need to install it:
 
 ```bash
@@ -470,19 +441,3 @@ course and links for further reading.
 ### Flask
 
 We use Flask for creating the API interface for our application.
-It's a web application framework for Python: we can easily
-create an endpoint for asking questions and use web clients
-(like `curl` or `requests`) for communicating with it.
-
-In our case, we can send questions to `http://localhost:5000/question`.
-
-For more information, visit the [official Flask documentation](https://flask.palletsprojects.com/).
-
-
-## Acknowledgements 
-
-I thank the course participants for all your energy
-and positive feedback as well as the course sponsors for
-making it possible to run this course for free. 
-
-I hope you enjoyed doing the course =)
