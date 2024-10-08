@@ -12,7 +12,6 @@ def search(query):
         'input': 2.0,
         'instruction': 1.5,
         'output': 1.0,
-        'source': 0.5
     }
 
     results = index.search(
@@ -74,9 +73,25 @@ and provide your evaluation in parsable JSON without using code blocks:
 """.strip()
 
 
+def llm_chatgpt(prompt, model="gpt-4o-mini"):
+    response = client.chat.completions.create(
+        model=model, messages=[{"role": "user", "content": prompt}]
+    )
+
+    answer = response.choices[0].message.content
+
+    token_stats = {
+        "prompt_tokens": response.usage.prompt_tokens,
+        "completion_tokens": response.usage.completion_tokens,
+        "total_tokens": response.usage.total_tokens,
+    }
+
+    return answer, token_stats
+
+
 def evaluate_relevance(question, answer):
     prompt = evaluation_prompt_template.format(question=question, answer=answer)
-    evaluation, tokens = llm(prompt, model="gpt-4o-mini")
+    evaluation, tokens = llm_chatgpt(prompt, model="gpt-4o-mini")
 
     try:
         json_eval = json.loads(evaluation)
@@ -86,27 +101,23 @@ def evaluate_relevance(question, answer):
         return result, tokens
 
 
-def rag(query, model="gpt-4o-mini"):
-    t0 = time()
+
+def rag_with_evaluation(query):
+    t0 = time.time()
 
     search_results = search(query)
     prompt = build_prompt(query, search_results)
-    answer, token_stats = llm(prompt, model=model)
+    answer = rag(query)
 
     relevance, rel_token_stats = evaluate_relevance(query, answer)
 
-    t1 = time()
+    t1 = time.time()
     took = t1 - t0
-
     answer_data = {
         "answer": answer,
-        "model_used": model,
         "response_time": took,
         "relevance": relevance.get("Relevance", "UNKNOWN"),
         "relevance_explanation": relevance.get("Explanation", "Failed to parse evaluation"),
-        "prompt_tokens": token_stats["prompt_tokens"],
-        "completion_tokens": token_stats["completion_tokens"],
-        "total_tokens": token_stats["total_tokens"],
         "eval_prompt_tokens": rel_token_stats["prompt_tokens"],
         "eval_completion_tokens": rel_token_stats["completion_tokens"],
         "eval_total_tokens": rel_token_stats["total_tokens"],
