@@ -1,10 +1,13 @@
 import json
 from time import time
+import openai
 from openai import OpenAI
 import ingest
 from transformers import pipeline
 
 client = OpenAI()
+openai.api_key = "YOUR_API_KEY"
+
 index = ingest.load_index()
 
 def search(query):
