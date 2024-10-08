@@ -2,6 +2,7 @@ import json
 from time import time
 from openai import OpenAI
 import ingest
+from transformers import pipeline
 
 client = OpenAI()
 index = ingest.load_index()
@@ -21,45 +22,36 @@ def search(query):
     return results
 
 prompt_template = """
-You're an expert answering questions based on the provided CONTEXT from our database.
+You're a financial analyst. Answer the QUESTION based on the CONTEXT from our finance database, and the output is for your reference.
 Use only the facts from the CONTEXT when answering the QUESTION.
-
 QUESTION: {question}
-
-CONTEXT:
-{context}
+CONTEXT:{context}
 """.strip()
 
 entry_template = """
 input: {input}
 instruction: {instruction}
 output: {output}
-source: {source}
 """.strip()
 
 def build_prompt(query, search_results):
     context = ""
-
     for doc in search_results:
         context += entry_template.format(**doc) + "\n\n"
 
     prompt = prompt_template.format(question=query, context=context).strip()
     return prompt
 
-def llm(prompt, model="gpt-4o-mini"):
-    response = client.chat.completions.create(
-        model=model, messages=[{"role": "user", "content": prompt}]
-    )
+llm = pipeline("question-answering", model="deepset/roberta-base-squad2")  
 
-    answer = response.choices[0].message.content
+def rag(query):
+    search_results = search(query)
+    if not search_results:
+        return "No relevant documents found."
+    prompt = build_prompt(query, search_results)
+    response = llm(question=query, context=prompt)
+    return response['answer']
 
-    token_stats = {
-        "prompt_tokens": response.usage.prompt_tokens,
-        "completion_tokens": response.usage.completion_tokens,
-        "total_tokens": response.usage.total_tokens,
-    }
-
-    return answer, token_stats
 
 evaluation_prompt_template = """
 You are an expert evaluator for a RAG system.
@@ -80,6 +72,7 @@ and provide your evaluation in parsable JSON without using code blocks:
   "Explanation": "[Provide a brief explanation for your evaluation]"
 }}
 """.strip()
+
 
 def evaluate_relevance(question, answer):
     prompt = evaluation_prompt_template.format(question=question, answer=answer)

@@ -71,7 +71,7 @@ def rag(query):
     
     response = llm(question=query, context=prompt)
     return response['answer']
-    return response
+
 
 question = 'What is APR?'
 answer = rag(question)
