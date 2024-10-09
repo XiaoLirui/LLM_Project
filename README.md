@@ -52,13 +52,12 @@ pipenv install --dev
 
 ### Database configuration
 
-Before the application starts for the first time, the database
-needs to be initialized.
+Before the application starts for the first time, the database needs to be initialized.
 
-First, run `postgres`:
+First, run `mongodb`:
 
 ```bash
-docker-compose up postgres
+docker-compose up mongodb
 ```
 
 Then run the [`db_prep.py`](fitness_assistant/db_prep.py) script:
@@ -66,29 +65,33 @@ Then run the [`db_prep.py`](fitness_assistant/db_prep.py) script:
 ```bash
 pipenv shell
 
-cd fitness_assistant
+cd LLM_Project
 
-export POSTGRES_HOST=localhost
+export MONGO_URI="mongodb://localhost:27017"
 python db_prep.py
+
 ```
 
-To check the content of the database, use `pgcli` (already
-installed with pipenv):
+To check the contents of the database, use the mongo client (bundled with MongoDB):
 
 ```bash
-pipenv run pgcli -h localhost -U your_username -d course_assistant -W
+mongo --host localhost --port 27017
+```
+Once connected, switch to your database (e.g., finance_qa):
+
+```bash
+use finance_qa
 ```
 
-You can view the schema using the `\d` command:
-
-```sql
-\d conversations;
+To view the schema, you can inspect a document in the collection:
+```bash
+db.conversations.findOne()
 ```
 
-And select from this table:
+To select and view all documents from this collection:
 
-```sql
-select * from conversations;
+```bash
+db.conversations.find().pretty()
 ```
 
 ### Running with Docker-Compose
@@ -102,10 +105,10 @@ docker-compose up
 ### Running locally
 
 If you want to run the application locally,
-start only postres and grafana:
+start only mongodb and grafana:
 
 ```bash
-docker-compose up postgres grafana
+docker-compose up mongodb grafana
 ```
 
 If you previously started all applications with
