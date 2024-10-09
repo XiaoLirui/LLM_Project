@@ -55,8 +55,6 @@ docker-compose up mongodb
 Then run the [`db_init.py`](LLM_Project/db_init.py) script:
 
 ```bash
-pipenv shell
-
 cd LLM_Project
 
 export MONGO_URI="mongodb://localhost:27017"
@@ -105,7 +103,6 @@ docker-compose up mongodb grafana
 Now run the app on your host machine:
 
 ```bash
-pipenv shell
 cd LLM_Project
 python app.py
 ```
@@ -149,11 +146,11 @@ We built an interactive CLI application using
 To start it, run:
 
 ```bash
-pipenv run python cli.py
+python cli.py
 ```
 
 ```bash
-pipenv run python cli.py --random
+python cli.py --random
 ```
 
 ### Using `requests`
@@ -163,7 +160,7 @@ When the application is running, you can use
 to send questions—use [test.py](test.py) for testing it:
 
 ```bash
-pipenv run python test.py
+python test.py
 ```
 
 It will use a question as a sample and send it to the app.
@@ -228,13 +225,6 @@ It's executed inside [`rag.py`](LLM_Project/rag.py) when we import it.
 
 For experiments, we use Jupyter notebooks.
 They are in the [`notebooks`](notebooks/) folder.
-
-To start Jupyter, run:
-
-```bash
-cd notebooks
-pipenv run jupyter notebook
-```
 
 We have the following notebooks:
 
@@ -324,11 +314,7 @@ running (it starts automatically when you do `docker-compose up`).
 Then run:
 
 ```bash
-pipenv shell
-
 cd grafana
-
-# make sure the POSTGRES_HOST variable is not overwritten 
 env | grep POSTGRES_HOST
 
 python init.py
@@ -340,11 +326,6 @@ Then go to [localhost:3000](http://localhost:3000):
 - Password: "admin"
 
 When prompted, keep "admin" as the new password.
-
-## Background
-
-Here we provide background on some tech not used in the
-course and links for further reading.
 
 ### Flask
 
