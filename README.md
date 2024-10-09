@@ -13,13 +13,13 @@ The Financial Q&A RAG is designed to assist users in navigating diverse financia
 
 The dataset used in this project contains information about various questions, including:
 
-- **Exercise Name:** The name of the exercise (e.g., Push-Ups, Squats).
-- **Type of Activity:** The general category of the exercise (e.g., Strength, Mobility, Cardio).
-- **Type of Equipment:** The equipment needed for the exercise (e.g., Bodyweight, Dumbbells, Kettlebell).
-- **Body Part:** The part of the body primarily targeted by the exercise (e.g., Upper Body, Core, Lower Body).
+- **Input:** The question itself.
+- **Instruction:** The general category of the exercise.
+- **Output:** The answer to that specific question.
+- **Source:** The dataset source of this question. (e.g., Investopedia Dataset, Sujet Finance Dataset).
 
 
-The dataset was generated using ChatGPT and contains 207 records. It serves as the foundation for the Fitness Assistant's exercise recommendations and instructional support.
+The dataset was from hugging face and contains 384058 records. It serves as the foundation for Finance Analyst's insight and work support.
 
 You can find the data in [`data/data.csv`](data/data.csv).
 
