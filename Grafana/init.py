@@ -13,11 +13,12 @@ GRAFANA_URL = "http://localhost:3000"
 GRAFANA_USER = os.getenv("GRAFANA_ADMIN_USER")
 GRAFANA_PASSWORD = os.getenv("GRAFANA_ADMIN_PASSWORD")
 
-PG_HOST = os.getenv("POSTGRES_HOST")
-PG_DB = os.getenv("POSTGRES_DB")
-PG_USER = os.getenv("POSTGRES_USER")
-PG_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-PG_PORT = os.getenv("POSTGRES_PORT")
+MONGO_HOST = os.getenv("MONGO_HOST")
+MONGO_DB = os.getenv("MONGO_DB")
+MONGO_USER = os.getenv("MONGO_USER")
+MONGO_PASSWORD = os.getenv("MONGO_PASSWORD")
+MONGO_PORT = os.getenv("MONGO_PORT")
+
 
 
 def create_api_key():
@@ -62,17 +63,19 @@ def create_or_update_datasource(api_key):
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
+    
     datasource_payload = {
-        "name": "PostgreSQL",
-        "type": "postgres",
-        "url": f"{PG_HOST}:{PG_PORT}",
+        "name": "MongoDB",  # Change the datasource name
+        "type": "mongodb",  # Change datasource type to MongoDB
+        "url": f"{MONGO_HOST}:{MONGO_PORT}",
         "access": "proxy",
-        "user": PG_USER,
-        "database": PG_DB,
         "basicAuth": False,
         "isDefault": True,
-        "jsonData": {"sslmode": "disable", "postgresVersion": 1300},
-        "secureJsonData": {"password": PG_PASSWORD},
+        "jsonData": {
+            "username": MONGO_USER,
+            "password": MONGO_PASSWORD,
+            "database": MONGO_DB,
+        },
     }
 
     print("Datasource payload:")

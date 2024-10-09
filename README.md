@@ -19,9 +19,7 @@ The dataset used in this project contains information about various questions, i
 - **Source:** The dataset source of this question. (e.g., Investopedia Dataset, Sujet Finance Dataset).
 
 
-The dataset was from hugging face and contains 384058 records. It serves as the foundation for Finance Analyst's insight and work support.
-
-You can find the data in [`data/data.csv`](data/data.csv).
+The dataset was from hugging face and contains 384058 records. It serves as the foundation for Finance Analyst's insight and work support. You can find the data in https://huggingface.co/datasets/taddeusb90/finbro-v0.1.0.
 
 ## Technologies
 
@@ -60,7 +58,7 @@ First, run `mongodb`:
 docker-compose up mongodb
 ```
 
-Then run the [`db_prep.py`](fitness_assistant/db_prep.py) script:
+Then run the [`db_init.py`](LLM_Project/db_init.py) script:
 
 ```bash
 pipenv shell
@@ -68,7 +66,7 @@ pipenv shell
 cd LLM_Project
 
 export MONGO_URI="mongodb://localhost:27017"
-python db_prep.py
+python db_init.py
 
 ```
 
@@ -104,28 +102,17 @@ docker-compose up
 
 ### Running locally
 
-If you want to run the application locally,
-start only mongodb and grafana:
+If you want to run the application locally, start only mongodb and grafana:
 
 ```bash
 docker-compose up mongodb grafana
-```
-
-If you previously started all applications with
-`docker-compose up`, you need to stop the `app`:
-
-```bash
-docker-compose stop app
 ```
 
 Now run the app on your host machine:
 
 ```bash
 pipenv shell
-
-cd fitness_assistant
-
-export POSTGRES_HOST=localhost
+cd LLM_Project
 python app.py
 ```
 
@@ -140,63 +127,20 @@ as in the previous section.
 Next, build the image:
 
 ```bash
-docker build -t fitness-assistant .
+docker build -t finance-qa .
 ```
 
 And run it:
 
 ```bash
 docker run -it --rm \
-    --network="fitness-assistant_default" \
+    --network="finance-qa-default" \
     --env-file=".env" \
     -e OPENAI_API_KEY=${OPENAI_API_KEY} \
     -e DATA_PATH="data/data.csv" \
     -p 5000:5000 \
-    fitness-assistant
+    finance-qa
 ```
-
-### Time configuration
-
-When inserting logs into the database, ensure the timestamps are
-correct. Otherwise, they won't be displayed accurately in Grafana.
-
-When you start the application, you will see the following in
-your logs:
-
-```
-Database timezone: Etc/UTC
-Database current time (UTC): 2024-08-24 06:43:12.169624+00:00
-Database current time (Europe/Berlin): 2024-08-24 08:43:12.169624+02:00
-Python current time: 2024-08-24 08:43:12.170246+02:00
-Inserted time (UTC): 2024-08-24 06:43:12.170246+00:00
-Inserted time (Europe/Berlin): 2024-08-24 08:43:12.170246+02:00
-Selected time (UTC): 2024-08-24 06:43:12.170246+00:00
-Selected time (Europe/Berlin): 2024-08-24 08:43:12.170246+02:00
-```
-
-Make sure the time is correct.
-
-You can change the timezone by replacing `TZ` in `.env`.
-
-On some systems, specifically WSL, the clock in Docker may get
-out of sync with the host system. You can check that by running:
-
-```bash
-docker run ubuntu date
-```
-
-If the time doesn't match yours, you need to sync the clock:
-
-```bash
-wsl
-
-sudo apt install ntpdate
-sudo ntpdate time.windows.com
-```
-
-Note that the time is in UTC.
-
-After that, start the application (and the database) again.
 
 
 ## Using the application
@@ -214,9 +158,6 @@ To start it, run:
 pipenv run python cli.py
 ```
 
-You can also make it randomly select a question from
-[our ground truth dataset](data/ground-truth-retrieval.csv):
-
 ```bash
 pipenv run python cli.py --random
 ```
@@ -231,8 +172,7 @@ to send questions—use [test.py](test.py) for testing it:
 pipenv run python test.py
 ```
 
-It will pick a random question from the ground truth dataset
-and send it to the app.
+It will use a question as a sample and send it to the app.
 
 ### CURL
 
@@ -240,7 +180,7 @@ You can also use `curl` for interacting with the API:
 
 ```bash
 URL=http://localhost:5000
-QUESTION="Is the Lat Pulldown considered a strength training activity, and if so, why?"
+QUESTION="What is APR"
 DATA='{
     "question": "'${QUESTION}'"
 }'
@@ -249,16 +189,6 @@ curl -X POST \
     -H "Content-Type: application/json" \
     -d "${DATA}" \
     ${URL}/question
-```
-
-You will see something like the following in the response:
-
-```json
-{
-    "answer": "Yes, the Lat Pulldown is considered a strength training activity. This classification is due to it targeting specific muscle groups, specifically the Latissimus Dorsi and Biceps, which are essential for building upper body strength. The exercise utilizes a machine, allowing for controlled resistance during the pulling action, which is a hallmark of strength training.",
-    "conversation_id": "4e1cef04-bfd9-4a2c-9cdd-2771d8f70e4d",
-    "question": "Is the Lat Pulldown considered a strength training activity, and if so, why?"
-}
 ```
 
 Sending feedback:
@@ -285,22 +215,6 @@ After sending it, you'll receive the acknowledgement:
 }
 ```
 
-## Code
-
-The code for the application is in the [`fitness_assistant`](fitness_assistant/) folder:
-
-- [`app.py`](fitness_assistant/app.py) - the Flask API, the main entrypoint to the application
-- [`rag.py`](fitness_assistant/rag.py) - the main RAG logic for building the retrieving the data and building the prompt
-- [`ingest.py`](fitness_assistant/ingest.py) - loading the data into the knowledge base
-- [`minsearch.py`](fitness_assistant/minsearch.py) - an in-memory search engine
-- [`db.py`](fitness_assistant/db.py) - the logic for logging the requests and responses to postgres
-- [`db_prep.py`](fitness_assistant/db_prep.py) - the script for initializing the database
-
-We also have some code in the project root directory:
-
-- [`test.py`](test.py) - select a random question for testing
-- [`cli.py`](cli.py) - interactive CLI for the APP
-
 ### Interface
 
 We use Flask for serving the application as an API.
@@ -312,12 +226,9 @@ for examples on how to interact with the application.
 
 The ingestion script is in [`ingest.py`](fitness_assistant/ingest.py).
 
-Since we use an in-memory database, `minsearch`, as our
-knowledge base, we run the ingestion script at the startup
-of the application.
+Since we use an in-memory database, `minsearch`, as our knowledge base, we run the ingestion script at the startup of the application.
 
-It's executed inside [`rag.py`](fitness_assistant/rag.py)
-when we import it.
+It's executed inside [`rag.py`](LLM_Project/rag.py) when we import it.
 
 ## Experiments
 

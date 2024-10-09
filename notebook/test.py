@@ -5,7 +5,7 @@ import pandas as pd
 dataset = load_dataset("taddeusb90/finbro-v0.1.0", cache_dir="../data")
 dataset = pd.DataFrame(dataset)
 dataset = pd.json_normalize(dataset['train'])
-dataset = dataset.head(10000)
+# dataset = dataset.head(10000)
 dataset = dataset.dropna(subset=['input', 'instruction','output'])
 
 
