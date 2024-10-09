@@ -1,1 +1,12 @@
 datasets
+requests==2.31.0          
+python-dotenv==1.0.0       
+pymongo==4.5.0             
+grafanalib==0.7.0          
+schedule==1.1.0            
+prefect==2.10.5           
+pandas==1.5.3             
+numpy==1.24.3            
+matplotlib==3.7.2  
+openai==0.27.10            
+transformers==4.31.0     

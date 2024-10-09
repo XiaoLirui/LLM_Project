@@ -33,16 +33,10 @@ The dataset was from hugging face and contains 384058 records. It serves as the 
 ## Preparation
 
 Since we use OpenAI, you need to provide the API key in the rag.py;
-For dependency management, we use pipenv, so you need to install it:
+For dependency management, you can use:
 
 ```bash
-pip install pipenv
-```
-
-Once installed, you can install the app dependencies:
-
-```bash
-pipenv install --dev
+pip install -r requirements.txt
 ```
 
 ## Running the application
