@@ -187,7 +187,7 @@ curl -X POST \
 Sending feedback:
 
 ```bash
-ID="4e1cef04-bfd9-4a2c-9cdd-2771d8f70e4d"
+ID="9c1ceg04-bad5-3v1c-7cjj-6782d8w79e2i"
 URL=http://localhost:5000
 FEEDBACK_DATA='{
     "conversation_id": "'${ID}'",
@@ -204,20 +204,16 @@ After sending it, you'll receive the acknowledgement:
 
 ```json
 {
-    "message": "Feedback received for conversation 4e1cef04-bfd9-4a2c-9cdd-2771d8f70e4d: 1"
+    "message": "Feedback received for conversation 9c1ceg04-bad5-3v1c-7cjj-6782d8w79e2i: 1"
 }
 ```
 
 ### Interface
 
-We use Flask for serving the application as an API.
-
-Refer to the ["Using the Application" section](#using-the-application)
-for examples on how to interact with the application.
-
+We use Flask for serving the application as an API. And We plan to develop a fronted-end web page in the near future.
 ### Ingestion
 
-The ingestion script is in [`ingest.py`](fitness_assistant/ingest.py).
+The ingestion script is in [`ingest.py`](LLM_Project/ingest.py).
 
 Since we use an in-memory database, `minsearch`, as our knowledge base, we run the ingestion script at the startup of the application.
 
@@ -298,8 +294,8 @@ It's accessible at [localhost:3000](http://localhost:3000):
 
 All Grafana configurations are in the [`grafana`](grafana/) folder:
 
-- [`init.py`](grafana/init.py) - for initializing the datasource and the dashboard.
-- [`dashboard.json`](grafana/dashboard.json) - the actual dashboard (taken from LLM Zoomcamp without changes).
+- [`init.py`](Grafana/init.py) - for initializing the datasource and the dashboard.
+- [`dashboard.json`](Grafana/dashboard.json) - the actual dashboard (taken from LLM Zoomcamp without changes).
 
 To initialize the dashboard, first ensure Grafana is
 running (it starts automatically when you do `docker-compose up`).
@@ -308,7 +304,7 @@ Then run:
 
 ```bash
 cd grafana
-env | grep POSTGRES_HOST
+env | grep MONGODB_HOST
 
 python init.py
 ```

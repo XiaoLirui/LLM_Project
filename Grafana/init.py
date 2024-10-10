@@ -36,7 +36,7 @@ def create_api_key():
         print("API key created successfully")
         return response.json()["key"]
 
-    elif response.status_code == 409:  # Conflict, key already exists
+    elif response.status_code == 409: 
         print("API key already exists, updating...")
         # Find the existing key
         keys_response = requests.get(f"{GRAFANA_URL}/api/auth/keys", auth=auth)
