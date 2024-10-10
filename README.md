@@ -28,7 +28,7 @@ The dataset was from hugging face and contains 384058 records. It serves as the 
 - Minsearch for full-text search
 - Flask as the API interface
 - Grafana for monitoring and MongoDB as the backend for it
-- OpenAI and Huggingface models as an LLM 
+- OpenAI and Huggingface models(deepset/roberta-base-squad2) as an LLM 
 
 ## Preparation
 
@@ -61,6 +61,10 @@ export MONGO_URI="mongodb://localhost:27017"
 python db_init.py
 
 ```
+
+<p align="center">
+  <img src="pics/db_init.png">
+</p>
 
 To check the contents of the database, use the mongo client (bundled with MongoDB):
 
@@ -155,9 +159,7 @@ python cli.py --random
 
 ### Using `requests`
 
-When the application is running, you can use
-[requests](https://requests.readthedocs.io/en/latest/)
-to send questions—use [test.py](test.py) for testing it:
+When the application is running, you can use 'requests' to send questions—use [test.py](test.py) for testing it:
 
 ```bash
 python test.py
