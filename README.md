@@ -142,27 +142,13 @@ docker run -it --rm \
 
 When the application is running, we can start using it.
 
-### CLI
-
-We built an interactive CLI application using
-[questionary](https://questionary.readthedocs.io/en/stable/).
-
-To start it, run:
-
-```bash
-python cli.py
-```
-
-```bash
-python cli.py --random
-```
 
 ### Using `requests`
 
-When the application is running, you can use 'requests' to send questions—use [test.py](test.py) for testing it:
+When the application is running, you can use 'requests' to send questions. Use [sample_send.py](sample_send.py) for testing it:
 
 ```bash
-python test.py
+python sample_send.py
 ```
 
 It will use a question as a sample and send it to the app.
