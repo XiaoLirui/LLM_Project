@@ -6,7 +6,6 @@ import ingest
 from transformers import pipeline
 
 # client = OpenAI()
-
 index = ingest.load_index()
 
 def search(query):

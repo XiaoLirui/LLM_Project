@@ -9,8 +9,7 @@ app = Flask(__name__)
 def handle_question():
     data = request.json
     question = data.get("question")
-    instructions = data.get('instructions')
-
+    
     if not question:
         return jsonify({"error": "No question provided"}), 400
 

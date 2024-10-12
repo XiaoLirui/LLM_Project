@@ -45,7 +45,7 @@ class Index:
         """
         self.docs = docs
         keyword_data = {field: [] for field in self.keyword_fields}
-
+            
         for field in self.text_fields:
             texts = [doc.get(field, '') for doc in docs]
             # print(f"Field: {field}, Texts: {texts}")

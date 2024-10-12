@@ -12,7 +12,7 @@ def load_index():
     documents = dataset.to_dict(orient="records")
 
     index = minsearch.Index(
-        text_fields=["input","instructions","output"],  
+        text_fields=["input","instruction","output"],  
         keyword_fields=[],  
     )
 

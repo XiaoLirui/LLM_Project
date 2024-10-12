@@ -208,12 +208,12 @@ It's executed inside [`rag.py`](LLM_Project/rag.py) when we import it.
 ## Experiments
 
 For experiments, we use Jupyter notebooks.
-They are in the [`notebooks`](notebooks/) folder.
+They are in the [`notebook`](notebook/) folder.
 
 We have the following notebooks:
 
-- [`rag-test.ipynb`](notebooks/rag-test.ipynb): The RAG flow and evaluating the system.
-- [`evaluation-data-generation.ipynb`](notebooks/evaluation-data-generation.ipynb): Generating the ground truth dataset for retrieval evaluation.
+- [`rag-test.ipynb`](notebook/rag-test.ipynb): The RAG flow and evaluating the system.
+- [`evaluation-data-generation.ipynb`](notebook/evaluation-data-generation.ipynb): Generating the ground truth dataset for retrieval evaluation.
 
 ### Retrieval evaluation
 

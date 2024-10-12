@@ -3,16 +3,17 @@ import requests
 
 df = pd.read_csv("./data/question_sample.csv")
 
+
 sample_row = df.sample(n=1).iloc[0]
 
 question = sample_row['input']
-instructions = sample_row['instructions']
+instruction = sample_row['instruction']
 
 print("Question: ", question)
-print("Instruction: ", instructions)
+print("Instruction: ", instruction)
 url = "http://localhost:5000/question"
 
-data = {"question": question, "instructions": instructions}
+data = {"question": question, "instruction": instruction}
 
 response = requests.post(url, json=data)
 
