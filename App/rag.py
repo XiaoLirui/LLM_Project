@@ -1,7 +1,6 @@
 import json
 from time import time
 import openai
-from openai import OpenAI
 import ingest
 from transformers import pipeline
 
@@ -102,6 +101,31 @@ def evaluate_relevance(question, answer):
         return result, tokens
 
 
+def calculate_mrr(results, correct_answer):
+    """
+    计算 MRR (Mean Reciprocal Rank)
+    :param results: RAG 模型的输出结果列表
+    :param correct_answer: 正确答案的字符串
+    :return: MRR 值
+    """
+    for rank, result in enumerate(results, 1):
+        if correct_answer in result['answer']:
+            return 1 / rank
+    return 0 
+
+def calculate_hit_rate(results, correct_answer, k=10):
+    """
+    计算 Hit Rate
+    :param results: RAG 模型的输出结果列表
+    :param correct_answer: 正确答案的字符串
+    :param k: 前 k 个结果中是否有正确答案
+    :return: Hit Rate (0 或 1)
+    """
+    for result in results[:k]:
+        if correct_answer in result['answer']:
+            return 1
+    return 0 
+
 
 def rag_with_evaluation(query):
     t0 = time.time()
@@ -112,6 +136,9 @@ def rag_with_evaluation(query):
 
     relevance, rel_token_stats = evaluate_relevance(query, answer)
 
+    mrr_score = calculate_mrr(search_results, correct_answer)
+    hit_rate_score = calculate_hit_rate(search_results, correct_answer)
+    
     t1 = time.time()
     took = t1 - t0
     answer_data = {
@@ -122,6 +149,33 @@ def rag_with_evaluation(query):
         "eval_prompt_tokens": rel_token_stats["prompt_tokens"],
         "eval_completion_tokens": rel_token_stats["completion_tokens"],
         "eval_total_tokens": rel_token_stats["total_tokens"],
+        "mrr": mrr_score,  
+        "hit_rate": hit_rate_score,
     }
 
     return answer_data
+
+
+
+def evaluate_rag_model(test_data):
+    total_mrr = 0
+    total_hit_rate = 0
+    num_samples = len(test_data)
+
+    for i, row in test_data.iterrows():
+        query = row['input']
+        correct_answer = row['output']
+
+        answer_data = rag_with_evaluation(query, correct_answer)
+
+        total_mrr += answer_data["mrr"]
+        total_hit_rate += answer_data["hit_rate"]
+
+        print(f"Query {i+1}/{num_samples}: MRR={answer_data['mrr']}, Hit Rate={answer_data['hit_rate']}")
+
+    avg_mrr = total_mrr / num_samples
+    avg_hit_rate = total_hit_rate / num_samples
+
+    print(f"Average MRR: {avg_mrr}")
+    print(f"Average Hit Rate: {avg_hit_rate}")
+    return avg_mrr, avg_hit_rate

@@ -212,8 +212,8 @@ They are in the [`notebook`](notebook/) folder.
 
 We have the following notebooks:
 
-- [`rag-test.ipynb`](notebook/rag-test.ipynb): The RAG flow and evaluating the system.
-- [`evaluation-data-generation.ipynb`](notebook/evaluation-data-generation.ipynb): Generating the ground truth dataset for retrieval evaluation.
+- [`test.ipynb`](notebook/rag-test.ipynb): The RAG flow and a sample demo.
+- [`retrival_evaluation.ipynb.ipynb`](notebook/retrival_evaluation.ipynb): Evaluating the answer based on chatgpt. The questions are stored in the question_sample.csv.(data/question_sample.csv)
 
 ### Retrieval evaluation
 
