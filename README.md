@@ -219,26 +219,14 @@ We have the following notebooks:
 
 The basic approach - using `minsearch` without any boosting - gave the following metrics:
 
-- Hit rate: 94%
-- MRR: 82%
+- Hit rate: 84.2%
+- MRR: 75%
 
 The improved version (with tuned boosting):
 
-- Hit rate: 94%
-- MRR: 90%
+- Hit rate: 88.6%
+- MRR: 79.3%
 
-The best boosting parameters:
-
-```python
-boost = {
-    'exercise_name': 2.11,
-    'type_of_activity': 1.46,
-    'type_of_equipment': 0.65,
-    'body_part': 2.65,
-    'type': 1.31,
-    'muscle_groups_activated': 2.54,
-    'instructions': 0.74
-}
 ```
 
 ### RAG flow evaluation

@@ -73,7 +73,7 @@ and provide your evaluation in parsable JSON without using code blocks:
 """.strip()
 
 
-def llm_chatgpt(prompt, model="gpt-4o-mini"):
+def llm_chatgpt(prompt, model="gpt-3.5-turbo"):
     response = openai.ChatCompletion.create(
         model=model, messages=[{"role": "user", "content": prompt}]
     )
@@ -91,7 +91,7 @@ def llm_chatgpt(prompt, model="gpt-4o-mini"):
 
 def evaluate_relevance(question, answer):
     prompt = evaluation_prompt_template.format(question=question, answer=answer)
-    evaluation, tokens = llm_chatgpt(prompt, model="gpt-4o-mini")
+    evaluation, tokens = llm_chatgpt(prompt, model="gpt-3.5-turbo")
 
     try:
         json_eval = json.loads(evaluation)
@@ -101,43 +101,35 @@ def evaluate_relevance(question, answer):
         return result, tokens
 
 
-def calculate_mrr(results, correct_answer):
-    """
-    计算 MRR (Mean Reciprocal Rank)
-    :param results: RAG 模型的输出结果列表
-    :param correct_answer: 正确答案的字符串
-    :return: MRR 值
-    """
+def calculate_mrr(results):
     for rank, result in enumerate(results, 1):
-        if correct_answer in result['answer']:
+        relevance = result['relevance']
+        if relevance in ["RELEVANT", "PARTLY_RELEVANT"]:
             return 1 / rank
-    return 0 
+    return 0
 
-def calculate_hit_rate(results, correct_answer, k=10):
-    """
-    计算 Hit Rate
-    :param results: RAG 模型的输出结果列表
-    :param correct_answer: 正确答案的字符串
-    :param k: 前 k 个结果中是否有正确答案
-    :return: Hit Rate (0 或 1)
-    """
+def calculate_hit_rate(results, k=10):
     for result in results[:k]:
-        if correct_answer in result['answer']:
-            return 1
-    return 0 
+        relevance = result['relevance']
+        if relevance in ["RELEVANT", "PARTLY_RELEVANT"]:
+            return 1  # Hit
+    return 0
 
 
 def rag_with_evaluation(query):
     t0 = time.time()
 
     search_results = search(query)
+    if not search_results:
+        return {"answer": "No relevant documents found.", "mrr": 0, "hit_rate": 0}
+    
     prompt = build_prompt(query, search_results)
     answer = rag(query)
 
     relevance, rel_token_stats = evaluate_relevance(query, answer)
 
-    mrr_score = calculate_mrr(search_results, correct_answer)
-    hit_rate_score = calculate_hit_rate(search_results, correct_answer)
+    mrr_score = 1 if relevance.get("Relevance") in ["RELEVANT", "PARTLY_RELEVANT"] else 0
+    hit_rate_score = 1 if relevance.get("Relevance") in ["RELEVANT", "PARTLY_RELEVANT"] else 0
     
     t1 = time.time()
     took = t1 - t0

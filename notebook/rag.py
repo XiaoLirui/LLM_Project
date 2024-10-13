@@ -73,7 +73,7 @@ and provide your evaluation in parsable JSON without using code blocks:
 """.strip()
 
 
-def llm_chatgpt(prompt, model="gpt-4o-mini"):
+def llm_chatgpt(prompt, model="gpt-3.5-turbo"):
     response = openai.ChatCompletion.create(
         model=model, messages=[{"role": "user", "content": prompt}]
     )
@@ -91,7 +91,7 @@ def llm_chatgpt(prompt, model="gpt-4o-mini"):
 
 def evaluate_relevance(question, answer):
     prompt = evaluation_prompt_template.format(question=question, answer=answer)
-    evaluation, tokens = llm_chatgpt(prompt, model="gpt-4o-mini")
+    evaluation, tokens = llm_chatgpt(prompt, model="gpt-3.5-turbo")
 
     try:
         json_eval = json.loads(evaluation)
