@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      DATA_PATH: "data/data.csv"
+      DATA_PATH: "data/question_sample.csv"
       MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/${MONGO_INITDB_DATABASE}?authSource=admin" # MongoDB 连接字符串
     ports:
       - "${APP_PORT:-5000}:5000"

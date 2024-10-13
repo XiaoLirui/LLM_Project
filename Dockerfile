@@ -2,9 +2,9 @@ FROM python:3.8-slim
 
 WORKDIR /app
 
-COPY data/data.csv data/data.csv
+COPY data/question_sample.csv data/question_sample.csv
 
-COPY finance-qa . 
+COPY App . 
 
 COPY requirements.txt .  
 
